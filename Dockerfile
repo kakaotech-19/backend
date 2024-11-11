@@ -18,4 +18,4 @@ ARG BUILDDIR=/app/build/libs/
 COPY --from=build ${BUILDDIR}/*.jar ./
 
 # jar파일의 첫번째 행을 실행시키도록 함
-CMD ["sh", "-c", "java -jar -Dspring.profiles.active=prod *SNAPSHOT.jar"]
+CMD ["sh", "-c", "java $(env | xargs -I {} echo \"-D{}\" ) -jar ./todaktodak-api-0.0.1-SNAPSHOT.jar"]
