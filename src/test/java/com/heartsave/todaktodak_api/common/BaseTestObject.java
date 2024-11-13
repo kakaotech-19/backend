@@ -3,9 +3,12 @@ package com.heartsave.todaktodak_api.common;
 import com.heartsave.todaktodak_api.common.security.domain.AuthType;
 import com.heartsave.todaktodak_api.diary.constant.DiaryEmotion;
 import com.heartsave.todaktodak_api.diary.entity.DiaryEntity;
+import com.heartsave.todaktodak_api.member.domain.TodakRole;
 import com.heartsave.todaktodak_api.member.entity.MemberEntity;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class BaseTestObject {
 
@@ -22,8 +25,8 @@ public class BaseTestObject {
   private static String TEST_COMMENT = "test-ai-comment";
 
   // member
-  private static String TEST_LOGIN_ID = "TEST_LOGIN_ID";
-  private static String TEST_PASSWORD = "TEST_PASSWORD";
+  public static String TEST_LOGIN_ID = "TEST_LOGIN_ID";
+  public static String TEST_PASSWORD = "TEST_PASSWORD";
   private static String TEST_EMAIL = "TEST_EMAIL@kakao.com";
   private static String TEST_NICKNAME = "TEST_NICKNAME";
   private static String TEST_CHARACTER_INFO = "{\"TEST_CHARACTER_INFO\":\"test-character-info\"}";
@@ -32,6 +35,9 @@ public class BaseTestObject {
   private static String TEST_CHARACTER_STYLE = "romance";
   private static int TEST_CHARACTER_SEED = 13564;
 
+  private static PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+  private static String TEST_ENOCDE_PASSWORD = passwordEncoder.encode(TEST_PASSWORD);
+
   public static MemberEntity createMember() {
     return MemberEntity.builder()
         .id(1L)
@@ -39,6 +45,7 @@ public class BaseTestObject {
         .password(TEST_PASSWORD)
         .email(TEST_EMAIL)
         .authType(AuthType.BASE)
+        .role(TodakRole.ROLE_USER)
         .nickname(TEST_NICKNAME)
         .characterInfo(TEST_CHARACTER_INFO)
         .characterImageUrl(TEST_CHARACTER_IMAGE_URL)
@@ -53,9 +60,26 @@ public class BaseTestObject {
         .password(TEST_PASSWORD)
         .email(TEST_EMAIL)
         .authType(AuthType.BASE)
+        .role(TodakRole.ROLE_USER)
         .nickname(TEST_NICKNAME)
         .characterInfo(TEST_CHARACTER_INFO)
         .characterImageUrl(TEST_CHARACTER_IMAGE_URL)
+        .build();
+  }
+
+  public static MemberEntity createDBMember() {
+    return MemberEntity.builder()
+        .id(1L)
+        .loginId(TEST_LOGIN_ID)
+        .password(TEST_ENOCDE_PASSWORD)
+        .email(TEST_EMAIL)
+        .authType(AuthType.BASE)
+        .role(TodakRole.ROLE_USER)
+        .nickname(TEST_NICKNAME)
+        .characterInfo(TEST_CHARACTER_INFO)
+        .characterImageUrl(TEST_CHARACTER_IMAGE_URL)
+        .characterStyle(TEST_CHARACTER_STYLE)
+        .characterSeed(TEST_CHARACTER_SEED)
         .build();
   }
 
