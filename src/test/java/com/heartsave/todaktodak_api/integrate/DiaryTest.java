@@ -17,9 +17,7 @@ import com.heartsave.todaktodak_api.diary.dto.request.DiaryWriteRequest;
 import com.heartsave.todaktodak_api.diary.entity.DiaryEntity;
 import com.heartsave.todaktodak_api.diary.repository.DiaryRepository;
 import com.heartsave.todaktodak_api.member.entity.MemberEntity;
-import com.heartsave.todaktodak_api.member.repository.MemberRepository;
 import java.time.LocalDateTime;
-import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +37,6 @@ public class DiaryTest {
 
   @MockBean private DiaryRepository diaryRepository;
   @MockBean private AiClientService aiClientService;
-  @MockBean private MemberRepository memberRepository;
   private MemberEntity member;
 
   @BeforeEach
@@ -54,7 +51,6 @@ public class DiaryTest {
         new DiaryWriteRequest(LocalDateTime.now(), DiaryEmotion.HAPPY, DUMMY_STRING_CONTENT);
     AiDiaryContentResponse contentResponse =
         AiDiaryContentResponse.builder().aiComment("aiComment").build();
-    when(memberRepository.findById(member.getId())).thenReturn(Optional.of(member));
     when(diaryRepository.existsByDate(anyLong(), any(LocalDateTime.class))).thenReturn(false);
     when(aiClientService.callDiaryContent(any(DiaryEntity.class))).thenReturn(contentResponse);
 

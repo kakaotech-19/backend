@@ -7,10 +7,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.heartsave.todaktodak_api.ai.client.service.AiClientService;
 import com.heartsave.todaktodak_api.auth.dto.request.LoginRequest;
 import com.heartsave.todaktodak_api.common.BaseTestObject;
-import com.heartsave.todaktodak_api.diary.repository.DiaryRepository;
 import com.heartsave.todaktodak_api.member.entity.MemberEntity;
 import com.heartsave.todaktodak_api.member.repository.MemberRepository;
 import java.util.Optional;
@@ -27,8 +25,6 @@ import org.springframework.test.web.servlet.MockMvc;
 @AutoConfigureMockMvc
 public class AccessTokenTest {
   @MockBean private MemberRepository memberRepository;
-  @MockBean private DiaryRepository diaryRepository;
-  @MockBean private AiClientService aiClientService;
   @Autowired private ObjectMapper objectMapper;
   @Autowired private MockMvc mockMvc;
   private MemberEntity member;
