@@ -13,14 +13,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.heartsave.todaktodak_api.common.exception.errorspec.PublicDiaryErrorSpec;
 import com.heartsave.todaktodak_api.common.security.WithMockTodakUser;
-import com.heartsave.todaktodak_api.common.security.domain.TodakUser;
 import com.heartsave.todaktodak_api.diary.constant.DiaryReactionType;
 import com.heartsave.todaktodak_api.diary.dto.response.MySharedDiaryPaginationResponse;
 import com.heartsave.todaktodak_api.diary.dto.response.MySharedDiaryResponse;
 import com.heartsave.todaktodak_api.diary.entity.projection.DiaryReactionCountProjection;
 import com.heartsave.todaktodak_api.diary.entity.projection.MySharedDiaryPreviewProjection;
 import com.heartsave.todaktodak_api.diary.exception.PublicDiaryNotFoundException;
-import com.heartsave.todaktodak_api.diary.service.MySharedDiaryService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -29,23 +27,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-@WebMvcTest(controllers = MySharedDiaryController.class)
 @AutoConfigureMockMvc(addFilters = false)
-public class MySharedDiaryControllerTest {
-
-  @Autowired private MockMvc mockMvc;
-
-  @MockBean private MySharedDiaryService mockMySharedDiaryService;
-
-  @MockBean private TodakUser mockUser;
+public class MySharedControllerTest extends BaseControllerTest {
 
   @Mock private MySharedDiaryResponse diaryResponse;
   private MySharedDiaryPaginationResponse paginationResponse;
@@ -54,7 +41,6 @@ public class MySharedDiaryControllerTest {
   void setUp() {
     List<MySharedDiaryPreviewProjection> previews = createProjections();
     paginationResponse = MySharedDiaryPaginationResponse.of(previews);
-    when(mockUser.getId()).thenReturn(1L);
   }
 
   private List<MySharedDiaryPreviewProjection> createProjections() {
