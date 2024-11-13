@@ -41,6 +41,10 @@ base:
 logging:
   level:
     org.springframework.security: trace
+    org.springframework:
+      test:
+        context:
+          cache: debug
 ---
 spring:
   datasource:
