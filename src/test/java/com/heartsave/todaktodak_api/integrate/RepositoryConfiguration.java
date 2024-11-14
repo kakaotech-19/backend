@@ -1,10 +1,10 @@
 package com.heartsave.todaktodak_api.integrate;
 
-
 import com.heartsave.todaktodak_api.ai.client.service.AiClientService;
 import com.heartsave.todaktodak_api.diary.repository.DiaryReactionRepository;
 import com.heartsave.todaktodak_api.diary.repository.DiaryRepository;
 import com.heartsave.todaktodak_api.diary.repository.MySharedDiaryRepository;
+import com.heartsave.todaktodak_api.diary.repository.PublicDiaryRepository;
 import com.heartsave.todaktodak_api.member.repository.MemberRepository;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
@@ -15,6 +15,7 @@ public class RepositoryConfiguration {
   @MockBean private DiaryRepository diaryRepository;
   @MockBean private AiClientService aiClientService;
   @MockBean private MySharedDiaryRepository mySharedDiaryRepository;
+  @MockBean private PublicDiaryRepository publicDiaryRepository;
   @MockBean private DiaryReactionRepository reactionRepository;
 
   //  @Bean
