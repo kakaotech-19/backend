@@ -6,9 +6,12 @@ import com.heartsave.todaktodak_api.diary.repository.DiaryRepository;
 import com.heartsave.todaktodak_api.diary.repository.MySharedDiaryRepository;
 import com.heartsave.todaktodak_api.diary.repository.PublicDiaryRepository;
 import com.heartsave.todaktodak_api.member.repository.MemberRepository;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.mail.javamail.JavaMailSender;
 
-@org.springframework.boot.test.context.TestConfiguration
+@org.springframework.boot.test.context.TestConfiguration(proxyBeanMethods = false)
 public class RepositoryConfiguration {
 
   @MockBean private MemberRepository memberRepository;
@@ -17,7 +20,18 @@ public class RepositoryConfiguration {
   @MockBean private MySharedDiaryRepository mySharedDiaryRepository;
   @MockBean private PublicDiaryRepository publicDiaryRepository;
   @MockBean private DiaryReactionRepository reactionRepository;
+  @MockBean private JavaMailSender mailSender;
 
+  @MockBean
+  @Qualifier("otpRedisTemplate")
+  private RedisTemplate<String, String> redisTemplate;
+
+  //  @Bean
+  //  @Primary
+  //  public JavaMailSender mockJavaMailSender() {
+  //    return mock(JavaMailSender.class);
+  //  }
+  //
   //  @Bean
   //  @Primary
   //  public DiaryReactionRepository mockDiaryReactionRepository() {
