@@ -1,8 +1,10 @@
 package com.heartsave.todaktodak_api.integrate;
 
 import static com.heartsave.todaktodak_api.common.BaseTestObject.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.mockingDetails;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -25,7 +27,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -33,17 +35,28 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Import(RepositoryConfiguration.class)
 public class DiaryTest {
   @Autowired private MockMvc mockMvc;
   @Autowired private ObjectMapper objectMapper;
 
-  @MockBean private DiaryRepository diaryRepository;
-  @MockBean private AiClientService aiClientService;
-  @MockBean private MemberRepository memberRepository;
+  @Autowired private MemberRepository memberRepository;
+
+  @Autowired private DiaryRepository diaryRepository;
+
+  @Autowired private AiClientService aiClientService;
+
   private MemberEntity member;
 
   @BeforeEach
   void setup() {
+    assertThat(mockingDetails(memberRepository).isMock()).isTrue();
+    assertThat(mockingDetails(diaryRepository).isMock()).isTrue();
+    assertThat(mockingDetails(aiClientService).isMock()).isTrue();
+
+    System.out.println("memberRepository.hashCode() = " + memberRepository.hashCode());
+    System.out.println("diaryRepository.hashCode() = " + diaryRepository.hashCode());
+    System.out.println("aiClientService.hashCode() = " + aiClientService.hashCode());
     member = createMember();
   }
 

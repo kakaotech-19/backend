@@ -1,5 +1,7 @@
 package com.heartsave.todaktodak_api.integrate;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mockingDetails;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -20,22 +22,32 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Import(RepositoryConfiguration.class)
 public class AccessTokenTest {
-  @MockBean private MemberRepository memberRepository;
-  @MockBean private DiaryRepository diaryRepository;
-  @MockBean private AiClientService aiClientService;
-  @Autowired private ObjectMapper objectMapper;
-  @Autowired private MockMvc mockMvc;
+
+  @Autowired ObjectMapper objectMapper;
+  @Autowired MockMvc mockMvc;
+
+  @Autowired private MemberRepository memberRepository;
+
+  @Autowired private DiaryRepository diaryRepository;
+
+  @Autowired private AiClientService aiClientService;
+
   private MemberEntity member;
 
   @BeforeEach
   void setup() {
     member = BaseTestObject.createDBMember();
+    assertThat(mockingDetails(memberRepository).isMock()).isTrue();
+    System.out.println("memberRepository.hashCode() = " + memberRepository.hashCode());
+    System.out.println("diaryRepository.hashCode() = " + diaryRepository.hashCode());
+    System.out.println("aiClientService.hashCode() = " + aiClientService.hashCode());
     when(memberRepository.findMemberEntityByLoginId(member.getLoginId()))
         .thenReturn(Optional.of(member));
   }

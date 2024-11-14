@@ -14,6 +14,7 @@ import lombok.*;
 @Getter
 @Builder
 @Table(name = "member")
+@ToString
 public class MemberEntity extends BaseEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "member")
