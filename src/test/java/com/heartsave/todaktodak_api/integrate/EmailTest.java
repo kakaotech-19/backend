@@ -28,7 +28,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 @SpringBootTest
 @AutoConfigureMockMvc
 @Slf4j
-@Import(RepositoryConfiguration.class)
+@Import(IntegrateTestConfiguration.class)
 @DisplayName("이메일 인증 통합 테스트")
 public class EmailTest {
   @Autowired private MockMvc mockMvc;

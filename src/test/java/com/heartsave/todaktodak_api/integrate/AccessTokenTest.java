@@ -27,7 +27,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Import(RepositoryConfiguration.class)
+@Import(IntegrateTestConfiguration.class)
 public class AccessTokenTest {
 
   @Autowired ObjectMapper objectMapper;

@@ -40,7 +40,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 @SpringBootTest
 @AutoConfigureMockMvc
 @Slf4j
-@Import(RepositoryConfiguration.class)
+@Import(IntegrateTestConfiguration.class)
 public class MySharedDiaryTest {
   @Autowired private MockMvc mockMvc;
 

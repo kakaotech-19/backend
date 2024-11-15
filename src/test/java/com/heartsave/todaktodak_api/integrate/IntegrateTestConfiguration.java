@@ -1,6 +1,5 @@
 package com.heartsave.todaktodak_api.integrate;
 
-
 import com.heartsave.todaktodak_api.ai.client.service.AiClientService;
 import com.heartsave.todaktodak_api.auth.repository.OtpCacheRepository;
 import com.heartsave.todaktodak_api.diary.repository.DiaryReactionRepository;
@@ -12,7 +11,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mail.javamail.JavaMailSender;
 
 @org.springframework.boot.test.context.TestConfiguration(proxyBeanMethods = false)
-public class RepositoryConfiguration {
+public class IntegrateTestConfiguration {
 
   @MockBean private MemberRepository memberRepository;
   @MockBean private DiaryRepository diaryRepository;

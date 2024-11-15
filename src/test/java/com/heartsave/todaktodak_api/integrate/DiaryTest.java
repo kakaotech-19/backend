@@ -35,7 +35,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Import(RepositoryConfiguration.class)
+@Import(IntegrateTestConfiguration.class)
 public class DiaryTest {
   @Autowired private MockMvc mockMvc;
   @Autowired private ObjectMapper objectMapper;
