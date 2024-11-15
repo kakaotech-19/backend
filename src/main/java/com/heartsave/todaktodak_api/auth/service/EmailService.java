@@ -3,15 +3,14 @@ package com.heartsave.todaktodak_api.auth.service;
 import com.heartsave.todaktodak_api.auth.dto.request.EmailCheckRequest;
 import com.heartsave.todaktodak_api.auth.dto.request.EmailOtpCheckRequest;
 import com.heartsave.todaktodak_api.auth.exception.AuthException;
+import com.heartsave.todaktodak_api.auth.repository.OtpCacheRepository;
 import com.heartsave.todaktodak_api.common.exception.errorspec.AuthErrorSpec;
 import com.heartsave.todaktodak_api.member.repository.MemberRepository;
 import jakarta.mail.MessagingException;
 import java.time.Duration;
 import java.util.Date;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -19,18 +18,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class EmailService {
   private final JavaMailSender mailSender;
-  private final RedisTemplate<String, String> redisTemplate;
+  private final OtpCacheRepository otpCache;
   private final MemberRepository memberRepository;
 
   @Value("${spring.mail.username}")
   private String provider;
 
   private EmailService(
-      JavaMailSender mailSender,
-      @Qualifier("otpRedisTemplate") RedisTemplate<String, String> redisTemplate,
-      MemberRepository memberRepository) {
+      JavaMailSender mailSender, OtpCacheRepository otpCache, MemberRepository memberRepository) {
     this.mailSender = mailSender;
-    this.redisTemplate = redisTemplate;
+    this.otpCache = otpCache;
     this.memberRepository = memberRepository;
   }
 
@@ -49,15 +46,15 @@ public class EmailService {
     }
 
     mailSender.send(message);
-    redisTemplate.opsForValue().set("OTP:" + email, otp, Duration.ofMinutes(3));
+    otpCache.set("OTP:" + email, otp, Duration.ofMinutes(3));
   }
 
   public boolean verifyOtp(EmailOtpCheckRequest dto) {
     var key = "OTP:" + dto.email();
-    String actualOtp = redisTemplate.opsForValue().get(key);
+    String actualOtp = otpCache.get(key);
 
     if (actualOtp != null && actualOtp.equals(dto.emailOtp())) {
-      redisTemplate.delete(key);
+      otpCache.delete(key);
       return true;
     }
     return false;

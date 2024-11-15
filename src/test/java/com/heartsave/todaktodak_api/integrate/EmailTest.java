@@ -9,21 +9,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.heartsave.todaktodak_api.auth.dto.request.EmailCheckRequest;
 import com.heartsave.todaktodak_api.auth.dto.request.EmailOtpCheckRequest;
+import com.heartsave.todaktodak_api.auth.repository.OtpCacheRepository;
 import com.heartsave.todaktodak_api.member.repository.MemberRepository;
 import jakarta.mail.internet.MimeMessage;
-import java.time.Duration;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.MediaType;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.web.servlet.MockMvc;
@@ -40,21 +36,14 @@ public class EmailTest {
   @Autowired private ObjectMapper objectMapper;
 
   @Autowired private JavaMailSender mockMailSender;
-
-  @Qualifier("otpRedisTemplate")
-  @Autowired
-  private RedisTemplate<String, String> mockRedisTemplate;
-
-  @Mock private ValueOperations<String, String> valueOperations;
+  @Autowired private OtpCacheRepository otpCache;
 
   @Autowired private MemberRepository memberRepository;
 
   @BeforeEach
   void setup() {
     assertThat(mockingDetails(mockMailSender).isMock()).isTrue();
-    assertThat(mockingDetails(mockRedisTemplate).isMock()).isTrue();
     when(mockMailSender.createMimeMessage()).thenReturn(mock(MimeMessage.class));
-    when(mockRedisTemplate.opsForValue()).thenReturn(valueOperations);
   }
 
   @Test
@@ -72,14 +61,13 @@ public class EmailTest {
         .andDo(print());
 
     verify(mockMailSender, times(1)).send(any(MimeMessage.class));
-    verify(valueOperations, times(1)).set(anyString(), anyString(), any(Duration.class));
   }
 
   @Test
   @DisplayName("이메일 OTP 검증 - 올바른 OTP를 검증한다")
   public void testVerifyEmailOtp() throws Exception {
     EmailOtpCheckRequest request = new EmailOtpCheckRequest("test@example.com", "12345678");
-    when(valueOperations.get(anyString())).thenReturn("12345678");
+    when(otpCache.get("OTP:test@example.com")).thenReturn("12345678");
 
     mockMvc
         .perform(
@@ -89,14 +77,14 @@ public class EmailTest {
         .andExpect(status().isNoContent())
         .andDo(print());
 
-    verify(mockRedisTemplate, times(1)).delete(anyString());
+    verify(otpCache, times(1)).delete(anyString());
   }
 
   @Test
   @DisplayName("이메일 OTP 검증 실패 - 잘못된 OTP를 검증한다")
   public void testVerifyEmailOtpFail() throws Exception {
     EmailOtpCheckRequest request = new EmailOtpCheckRequest("test@example.com", "12345678");
-    when(mockRedisTemplate.opsForValue().get(anyString())).thenReturn("87654321");
+    when(otpCache.get(anyString())).thenReturn("87654321");
 
     mockMvc
         .perform(
