@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.context.WebApplicationContext;
 
 @WebMvcTest(
     controllers = {
@@ -23,11 +24,22 @@ import org.springframework.test.web.servlet.MockMvc;
 public class BaseControllerTest {
   @Autowired protected MockMvc mockMvc;
   @Autowired protected ObjectMapper objectMapper;
+  @Autowired WebApplicationContext context;
 
   @MockBean protected DiaryService diaryService;
   @MockBean protected MySharedDiaryService mockMySharedDiaryService;
   @MockBean protected PublicDiaryService publicDiaryService;
   @MockBean protected MemberService memberService;
+
+  //  @PostConstruct
+  //  public void setup() {
+  //    mockMvc =
+  //        MockMvcBuilders.webAppContextSetup(context)
+  //            .defaultRequest(
+  //                patch("/**").contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8"))
+  //            .alwaysDo(print())
+  //            .build();
+  //  }
 
   //  @Mock
   //  public TodakUser mockUser;

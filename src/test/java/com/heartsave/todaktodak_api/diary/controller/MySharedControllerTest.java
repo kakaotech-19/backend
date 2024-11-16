@@ -27,11 +27,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 
-@AutoConfigureMockMvc(addFilters = false)
 public class MySharedControllerTest extends BaseControllerTest {
 
   @Mock private MySharedDiaryResponse diaryResponse;

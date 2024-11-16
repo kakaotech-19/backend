@@ -8,7 +8,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.heartsave.todaktodak_api.common.exception.errorspec.MemberErrorSpec;
 import com.heartsave.todaktodak_api.common.security.WithMockTodakUser;
 import com.heartsave.todaktodak_api.common.security.domain.TodakUser;
-import com.heartsave.todaktodak_api.config.TestSecurityConfig;
 import com.heartsave.todaktodak_api.diary.controller.BaseControllerTest;
 import com.heartsave.todaktodak_api.member.dto.request.NicknameUpdateRequest;
 import com.heartsave.todaktodak_api.member.dto.response.MemberProfileResponse;
@@ -21,13 +20,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-@Import(TestSecurityConfig.class)
+// @Import(TestSecurityConfig.class)
 final class MemberControllerTest extends BaseControllerTest {
   @Autowired WebApplicationContext context;
 
@@ -35,7 +33,7 @@ final class MemberControllerTest extends BaseControllerTest {
       "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 
   @BeforeEach
-  void setup() {
+  public void setup() {
     mockMvc =
         MockMvcBuilders.webAppContextSetup(context)
             .defaultRequest(
