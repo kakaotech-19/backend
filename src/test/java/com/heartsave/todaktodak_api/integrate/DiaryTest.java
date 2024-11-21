@@ -17,7 +17,9 @@ import com.heartsave.todaktodak_api.diary.dto.request.DiaryWriteRequest;
 import com.heartsave.todaktodak_api.diary.entity.DiaryEntity;
 import com.heartsave.todaktodak_api.diary.repository.DiaryRepository;
 import com.heartsave.todaktodak_api.member.entity.MemberEntity;
+import com.heartsave.todaktodak_api.member.repository.MemberRepository;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +38,7 @@ public class DiaryTest {
   @Autowired private ObjectMapper objectMapper;
 
   @MockBean private DiaryRepository diaryRepository;
+  @MockBean private MemberRepository memberRepository;
   @MockBean private AiClientService aiClientService;
   private MemberEntity member;
 
@@ -53,6 +56,7 @@ public class DiaryTest {
         AiDiaryContentResponse.builder().aiComment("aiComment").build();
     when(diaryRepository.existsByDate(anyLong(), any(LocalDateTime.class))).thenReturn(false);
     when(aiClientService.callDiaryContent(any(DiaryEntity.class))).thenReturn(contentResponse);
+    when(memberRepository.findById(anyLong())).thenReturn(Optional.of(member));
 
     mockMvc
         .perform(
