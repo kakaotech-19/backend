@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.heartsave.todaktodak_api.auth.dto.request.LoginRequest;
 import com.heartsave.todaktodak_api.common.BaseTestObject;
+import com.heartsave.todaktodak_api.listener.ContextLoadTimeTestExecutionListener;
 import com.heartsave.todaktodak_api.member.entity.MemberEntity;
 import com.heartsave.todaktodak_api.member.repository.MemberRepository;
 import java.util.Optional;
@@ -19,10 +20,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.TestExecutionListeners.MergeMode;
 import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@TestExecutionListeners(
+    value = ContextLoadTimeTestExecutionListener.class,
+    mergeMode = MergeMode.MERGE_WITH_DEFAULTS)
 public class AccessTokenTest {
   @MockBean private MemberRepository memberRepository;
   @Autowired private ObjectMapper objectMapper;
