@@ -19,6 +19,7 @@ import com.heartsave.todaktodak_api.diary.entity.projection.MySharedDiaryContent
 import com.heartsave.todaktodak_api.diary.entity.projection.MySharedDiaryPreviewProjection;
 import com.heartsave.todaktodak_api.diary.repository.DiaryReactionRepository;
 import com.heartsave.todaktodak_api.diary.repository.MySharedDiaryRepository;
+import com.heartsave.todaktodak_api.listener.ContextLoadTimeTestExecutionListener;
 import com.heartsave.todaktodak_api.member.entity.MemberEntity;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -33,6 +34,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.TestExecutionListeners.MergeMode;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -41,6 +44,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 @AutoConfigureMockMvc
 @Slf4j
 @Import(IntegrateTestConfiguration.class)
+@TestExecutionListeners(
+    value = ContextLoadTimeTestExecutionListener.class,
+    mergeMode = MergeMode.MERGE_WITH_DEFAULTS)
 public class MySharedDiaryTest {
   @Autowired private MockMvc mockMvc;
 

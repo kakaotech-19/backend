@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.heartsave.todaktodak_api.auth.dto.request.EmailCheckRequest;
 import com.heartsave.todaktodak_api.auth.dto.request.EmailOtpCheckRequest;
 import com.heartsave.todaktodak_api.auth.repository.OtpCacheRepository;
+import com.heartsave.todaktodak_api.listener.ContextLoadTimeTestExecutionListener;
 import com.heartsave.todaktodak_api.member.repository.MemberRepository;
 import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.TestExecutionListeners.MergeMode;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -30,6 +33,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 @Slf4j
 @Import(IntegrateTestConfiguration.class)
 @DisplayName("이메일 인증 통합 테스트")
+@TestExecutionListeners(
+    value = ContextLoadTimeTestExecutionListener.class,
+    mergeMode = MergeMode.MERGE_WITH_DEFAULTS)
 public class EmailTest {
   @Autowired private MockMvc mockMvc;
 
