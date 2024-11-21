@@ -19,35 +19,47 @@ class TodaktodakApiApplicationTests {
     String[] beanNames = context.getBeanDefinitionNames();
     System.out.println("beanNames.length = " + beanNames.length);
 
-    Arrays.stream(beanNames)
-        .sorted()
-        .filter(name -> context.getBean(name).getClass().getName().contains("com.heartsave"))
-        .forEach(
-            name -> {
-              System.out.println("name = " + name);
-            });
+    printTodaktodak(beanNames);
+    printSpring(beanNames);
+  }
 
-    long count =
-        Arrays.stream(beanNames)
-            .sorted()
-            .filter(name -> context.getBean(name).getClass().getName().contains("com.heartsave"))
-            .count();
-    System.out.println("todaktodak = " + count);
-
+  private void printSpring(String[] beanNames) {
+    // Spring class
     Arrays.stream(beanNames)
         .sorted()
         .filter(name -> !context.getBean(name).getClass().getName().contains("com.heartsave"))
         .forEach(
             name -> {
               Object bean = context.getBean(name);
-              System.out.println("bean.getClass() = " + bean.getClass());
+              System.out.println("Spring Bean Class = " + bean.getClass());
             });
 
-    count =
+    // Spring bean count
+    long count =
         Arrays.stream(beanNames)
             .sorted()
             .filter(name -> !context.getBean(name).getClass().getName().contains("com.heartsave"))
             .count();
-    System.out.println("spring = " + count);
+    System.out.println("spring Bean Count = " + count);
+  }
+
+  private void printTodaktodak(String[] beanNames) {
+    // TodakTdoak class
+    Arrays.stream(beanNames)
+        .sorted()
+        .filter(name -> context.getBean(name).getClass().getName().contains("com.heartsave"))
+        .forEach(
+            name -> {
+              Object bean = context.getBean(name);
+              System.out.println("Todaktodak Bean Class = " + bean.getClass());
+            });
+
+    // TodakTdoak bean count
+    long count =
+        Arrays.stream(beanNames)
+            .sorted()
+            .filter(name -> context.getBean(name).getClass().getName().contains("com.heartsave"))
+            .count();
+    System.out.println("Todaktodak Bean Count= " + count);
   }
 }
