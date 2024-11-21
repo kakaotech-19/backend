@@ -5,14 +5,16 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.heartsave.todaktodak_api.common.exception.errorspec.MemberErrorSpec;
 import com.heartsave.todaktodak_api.common.security.WithMockTodakUser;
 import com.heartsave.todaktodak_api.common.security.domain.TodakUser;
-import com.heartsave.todaktodak_api.diary.controller.BaseControllerTest;
+import com.heartsave.todaktodak_api.config.TestSecurityConfig;
 import com.heartsave.todaktodak_api.member.dto.request.NicknameUpdateRequest;
 import com.heartsave.todaktodak_api.member.dto.response.MemberProfileResponse;
 import com.heartsave.todaktodak_api.member.dto.response.NicknameUpdateResponse;
 import com.heartsave.todaktodak_api.member.exception.MemberNotFoundException;
+import com.heartsave.todaktodak_api.member.service.MemberService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,20 +22,28 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-// @Import(TestSecurityConfig.class)
-final class MemberControllerTest extends BaseControllerTest {
+@WebMvcTest(controllers = MemberController.class)
+@Import(TestSecurityConfig.class)
+final class MemberControllerTest {
   @Autowired WebApplicationContext context;
+  @Autowired private ObjectMapper objectMapper;
+  @MockBean private MemberService memberService;
+  private MockMvc mockMvc;
 
   private static final String INVALID_NICKNAME_OVER_LENGTH =
       "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 
   @BeforeEach
-  public void setup() {
+  void setup() {
     mockMvc =
         MockMvcBuilders.webAppContextSetup(context)
             .defaultRequest(

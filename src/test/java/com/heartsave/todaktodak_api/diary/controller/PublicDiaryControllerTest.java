@@ -11,17 +11,30 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.heartsave.todaktodak_api.common.security.WithMockTodakUser;
 import com.heartsave.todaktodak_api.diary.constant.DiaryReactionType;
 import com.heartsave.todaktodak_api.diary.dto.PublicDiary;
 import com.heartsave.todaktodak_api.diary.dto.request.PublicDiaryReactionRequest;
 import com.heartsave.todaktodak_api.diary.dto.request.PublicDiaryWriteRequest;
 import com.heartsave.todaktodak_api.diary.dto.response.PublicDiaryPaginationResponse;
+import com.heartsave.todaktodak_api.diary.service.PublicDiaryService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
 
-public class PublicControllerTest extends BaseControllerTest {
+@WebMvcTest(controllers = PublicDiaryController.class)
+@AutoConfigureMockMvc(addFilters = false)
+public class PublicDiaryControllerTest {
+
+  @MockBean private PublicDiaryService publicDiaryService;
+  @Autowired private MockMvc mockMvc;
+  @Autowired private ObjectMapper objectMapper;
 
   @Test
   @DisplayName("공개 일기 작성 성공")
